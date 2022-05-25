@@ -1,16 +1,18 @@
+#ifndef MATHPARSER_H
+#define MATHPARSER_H
 #include <string>
 #include <vector>
-#include <cstdlib> 
+#include <cstdlib>
 
 using namespace std;
-      
+
 typedef enum
 {
    left,
    right
 } direction;
-      
-            
+
+
 class math_parser
 {
    private:
@@ -21,7 +23,7 @@ class math_parser
          direction dir;
          float (*func)(float, float);
       };
-          
+
       vector <oper> ops;
       int op_count;
       bool err;
@@ -34,19 +36,19 @@ class math_parser
       bool AddOperator(string name, int priority, direction dir, float (*func)(float, float));
       int Parse(string exp);
 };
-       
+
 math_parser::math_parser()
 {
    err = false;
    op_count = 0;
 }
-      
+
 math_parser::~math_parser()
 {
    //
 }
 
-     
+
 
 bool math_parser::AddOperator(string name, int priority, direction dir, float (*func)(float, float))
 {
@@ -89,7 +91,7 @@ vector<string> math_parser::ConvertToONP(string exp)
       ch = exp[i];
       if(atoi(ch.c_str()) <= 9 && (atoi(ch.c_str()) > 0 || ch == "0"))
       {
-         // Symbol jest cyfr¹
+         // Symbol jest cyfrï¿½
          ch2 = exp[++i];
          string c = ch;
          while(atoi(ch2.c_str()) <= 9 && (atoi(ch2.c_str()) > 0 || ch2 == "0" || ch2 == "."))
@@ -103,11 +105,11 @@ vector<string> math_parser::ConvertToONP(string exp)
       }
       else if(atoi(ch.c_str()) <= 'z' && atoi(ch.c_str()) >= 'a')
       {
-         // Symbol jest zmienn¹, albo funkcj¹
+         // Symbol jest zmiennï¿½, albo funkcjï¿½
       }
       else if(ch == ",")
       {
-         // Symbol jest znakiem oddzielaj¹cym argumenty funkcji
+         // Symbol jest znakiem oddzielajï¿½cym argumenty funkcji
          while(stack[stack.size()-1] != "(")
          {
             out.push_back(stack[stack.size()-1]);
@@ -132,16 +134,16 @@ vector<string> math_parser::ConvertToONP(string exp)
          // Symbol jest operatorem
          oper cur;
          IsOperator(ch, &cur); // Pobranie aktualnego operatora do zmiennej cur
-          
+
          if(stack.size() <= 0)
          {
-            // Nie ma ¿adnych operatorów na stosie
+            // Nie ma ï¿½adnych operatorï¿½w na stosie
             stack.push_back(ch);
             continue;
          }
-            
+
          oper op;
-         while(IsOperator(stack[stack.size()-1], &op) == true) // Dopóki na stosie znajduje siê odpowiedni operator
+         while(IsOperator(stack[stack.size()-1], &op) == true) // Dopï¿½ki na stosie znajduje siï¿½ odpowiedni operator
          {
             if((cur.dir == (direction)0 && cur.priority <= op.priority) || (cur.dir == (direction)1 && cur.priority < op.priority))
             {
@@ -149,7 +151,7 @@ vector<string> math_parser::ConvertToONP(string exp)
                stack.pop_back();
             }
             else
-               break; 
+               break;
             if(stack.size() <= 0)
             {
                break;
@@ -160,11 +162,11 @@ vector<string> math_parser::ConvertToONP(string exp)
    }
    while(stack.size() > 0)
    {
-      // Dodanie wszystkiego do wyjœcia
+      // Dodanie wszystkiego do wyjï¿½cia
       out.push_back(stack[stack.size()-1]);
       stack.pop_back();
    }
-                
+
    return out;
 }
 
@@ -172,7 +174,7 @@ int math_parser::Parse(string exp)
 {
    vector <string> symbols = ConvertToONP(exp);
    vector <string> stack;
-       
+
    for(int i = 0; i < (int)symbols.size(); i++)
    {
       string sym = symbols[i];
@@ -199,3 +201,5 @@ int math_parser::Parse(string exp)
    return atoi(ret.c_str());
 }
 
+
+#endif // MATHPARSER_H
